@@ -1,26 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { ThreeButton } from "./Components/ThreeButton";
+import { ResultBox } from "./Components/ResultBox";
+import { Textbox } from "./Components/Textbox";
 
-function App() {
+const RootDiv = styled.div`
+  margin: 50px;
+  width: 500px;
+  height: 400px;
+  background: lightcyan;
+  padding: 6px;
+`;
+
+const ButtonWidthDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export function App() {
+  const modes: [string, string, string] = ["Default", "Calculus", "Polar"];
+  const [selectedMode, setSelectedMode] = useState<0 | 1 | 2>(0);
+
+  const granularities: [string, string, string] = ["Coarse", "Normal", "Fine"];
+  const [selectedGranularity, setSelectedGranularity] = useState<0 | 1 | 2>(1);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RootDiv>
+      <ButtonWidthDiv>
+        <ThreeButton
+          selectedElement={selectedMode}
+          setSelectedElement={setSelectedMode}
+          names={modes}
+        />
+        <ThreeButton
+          selectedElement={selectedGranularity}
+          setSelectedElement={setSelectedGranularity}
+          names={granularities}
+        />
+      </ButtonWidthDiv>
+      <p>
+        Mode: {modes[selectedMode]} || Granularity:{" "}
+        {granularities[selectedGranularity]}
+      </p>
+      <Textbox />
+      <ResultBox equation={"(pi*2)/1"} />
+    </RootDiv>
   );
 }
-
-export default App;
