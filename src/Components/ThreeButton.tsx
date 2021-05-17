@@ -1,76 +1,60 @@
-import styled from "styled-components";
-import {ButtonGroup, Button as MUIButton} from "@material-ui/core";
+import { ButtonGroup, Button, WithStyles, Box } from "@material-ui/core";
+import { createStyles, Theme, withStyles } from "@material-ui/core/styles";
 
-interface ButtonProps {
-  selected?: boolean;
-}
+const styles = (theme: Theme) =>
+  createStyles({
+    Button: {
+      width: "fit-content",
+      cursor: "pointer",
+      fontWeight: "bold",
+    },
+  });
 
-const Div = styled.div`
-  display: flex;
-  justify-content: flex-start;
-`;
-
-const border_width = 1;
-
-const Button = styled(MUIButton)<ButtonProps>`
-  width: fit-content;
-  border: ${border_width}px solid black;
-  margin: 0;
-  padding: 10px;
-  border-radius: 0;
-  border-left-width: 0;
-  cursor: pointer;
-
-  &:hover {
-    background: red;
-  }
-`;
-
-Button.defaultProps = {
-  selected: false,
-};
-
-const LeftCapP = styled(Button)`
-  border-left-width: ${border_width}px;
-  border-radius: 5px 0 0 5px;
-`;
-
-const RightCapP = styled(Button)`
-  border-radius: 0 5px 5px 0;
-`;
-
-interface ThreeButtonProps {
+interface ThreeButtonProps extends WithStyles<typeof styles> {
   selectedElement: number;
   setSelectedElement: CallableFunction;
   names: [string, string, string];
 }
 
-export function ThreeButton(props: ThreeButtonProps) {
+function ThreeButtonUnstyled(props: ThreeButtonProps) {
   return (
     <div>
-      <Div>
-        <ButtonGroup>
-          <LeftCapP
-              color={props.selectedElement === 0 ? "primary" : "default"}
-              onClick={() => props.setSelectedElement(0)}
+      <Box display={"flex"} justifyContent={"flex-start"}>
+        <ButtonGroup
+          disableElevation
+          size={"small"}
+          aria-label="outlined primary button group"
+        >
+          <Button
+            variant={props.selectedElement === 0 ? "contained" : "outlined"}
+            className={props.classes.Button}
+            color={props.selectedElement === 0 ? "primary" : "default"}
+            onClick={() => props.setSelectedElement(0)}
           >
             {props.names[0]}
-          </LeftCapP>
+          </Button>
           <Button
-              color={props.selectedElement === 1 ? "primary" : "default"}
-              onClick={() => props.setSelectedElement(1)}
+            variant={props.selectedElement === 1 ? "contained" : "outlined"}
+            className={props.classes.Button}
+            color={props.selectedElement === 1 ? "primary" : "default"}
+            onClick={() => props.setSelectedElement(1)}
           >
             {props.names[1]}
           </Button>
-          <RightCapP
-              color={props.selectedElement === 2 ? "primary" : "default"}
-              onClick={() => props.setSelectedElement(2)}
+          <Button
+            variant={props.selectedElement === 2 ? "contained" : "outlined"}
+            className={props.classes.Button}
+            color={props.selectedElement === 2 ? "primary" : "default"}
+            onClick={() => props.setSelectedElement(2)}
           >
             {props.names[2]}
-          </RightCapP>
+          </Button>
         </ButtonGroup>
-
-      </Div>
+      </Box>
     </div>
   );
 }
+
+const ThreeButton = withStyles(styles)(ThreeButtonUnstyled);
+
+export { ThreeButton };

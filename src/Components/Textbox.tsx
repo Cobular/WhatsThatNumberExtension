@@ -1,54 +1,71 @@
 import styled from "styled-components";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+  WithStyles,
+} from "@material-ui/core";
+import { createStyles, Theme, withStyles } from "@material-ui/core/styles";
+import React, { useState } from "react";
 
-const Input = styled.input`
-  background: transparent;
-  border: none;
+const styles = (theme: Theme) =>
+  createStyles({
+    TextField: {
+      "&[type=number]": {
+        "-moz-appearance": "textfield",
+      },
+      "&::-webkit-outer-spin-button": {
+        "-webkit-appearance": "none",
+        margin: 0,
+      },
+      "&::-webkit-inner-spin-button": {
+        "-webkit-appearance": "none",
+        margin: 0,
+      },
+    },
+  });
 
-  ::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+interface TextboxProps extends WithStyles<typeof styles> {
+  setState: React.Dispatch<number | undefined>;
+}
+
+function TextboxUnstyled(props: TextboxProps) {
+  const [internalTextFieldState, setInternalTextFieldState] = useState("");
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    console.log(internalTextFieldState)
+    let num
+    if ((num = Number(internalTextFieldState)) !== 0 || num !== undefined)
+    props.setState(num);
   }
 
-  ::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  input[type="number"] {
-    -moz-appearance: textfield;
-  }
-`;
-
-const BackgroundDiv = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: -20px;
-  z-index: -1;
-
-  background: rgba(196, 196, 196, 0.3);
-  border: 2px solid #000000;
-  box-sizing: border-box;
-  border-radius: 7px;
-`;
-
-const TextboxDiv = styled.div`
-  position: relative;
-  margin: auto;
-  width: fit-content;
-  background: transparent;
-`;
-
-export function Textbox() {
   return (
-    <TextboxDiv>
-      <Input
-        type={"number"}
-        name={"Number"}
-        placeholder={"Enter a number..."}
-      />
-      <BackgroundDiv />
-    </TextboxDiv>
+    <Box display={"flex"} justifyContent={"center"}>
+      <form onSubmit={handleSubmit}>
+        <FormControl variant="outlined" className={props.classes.TextField}>
+          <InputLabel htmlFor="component-outlined">Number</InputLabel>
+          <OutlinedInput
+            id="component-outlined"
+            onChange={(event) => setInternalTextFieldState(event.target.value)}
+            label="Number"
+          />
+        </FormControl>
+        {/*<TextField*/}
+        {/*  id="standard-basic"*/}
+        {/*  label="Number"*/}
+        {/*  type={"Number"}*/}
+        {/*  variant={"outlined"}*/}
+        {/*  onChange={}*/}
+        {/*  Input={}*/}
+        {/*/>*/}
+      </form>
+    </Box>
   );
 }
+
+const Textbox = withStyles(styles)(TextboxUnstyled);
+
+export { Textbox };
